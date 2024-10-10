@@ -4,7 +4,7 @@ import time
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate , MessagesPlaceholder
 from langchain.chains import create_retrieval_chain , create_history_aware_retriever
-from langchain_chroma import Chroma
+from langchain_community.vectorstores import FAISS
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_groq import ChatGroq
@@ -66,7 +66,7 @@ if api_key:
     #split and create embeddings for the documnets
         text_splitter =RecursiveCharacterTextSplitter(chunk_size=5000 , chunk_overlap=200)
         splits = text_splitter.split_documents(documents)
-        vectorstore= Chroma.from_documents(documents=splits , embedding=embeddings ,  persist_directory="./chroma_db")
+        vectorstore= FAISS.from_documents(documents=splits , embedding=embeddings)
         retriever = vectorstore.as_retriever()
         
         
